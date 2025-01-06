@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Button, Card, Col } from 'react-bootstrap';
+import { Button, Card, Col, Container, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 const MovieList = () => {
@@ -34,26 +34,40 @@ const MovieList = () => {
   const path = 'https://image.tmdb.org/t/p/w500';
 
   return (
-    <div>
-      {movies?.map((movie) => (
-        <Col className={'mt-3'}>
-          <Card style={{ width: '18rem' }}>
-            <Card.Img
-              variant="top"
-              src={path + movie.poster_path}
-              style={{ height: '250px' }}
-            ></Card.Img>
-            <Card.Body>
-              <Card.Title>{movie.title}</Card.Title>
-              <Card.Text>{movie.overview.slice(0, 20)}...</Card.Text>
-              <Link to={`/movie/${movie.id}`}>
-                <Button variant="primary">Go Detail</Button>
-              </Link>
-            </Card.Body>
-          </Card>
-        </Col>
-      ))}
-    </div>
+    <Container className={'mt-3'}>
+      <Row>
+        {movies?.map((movie) => (
+          <Col className={'mt-3'}>
+            <Card style={{ width: '18rem' }}>
+              <Card.Img
+                variant="top"
+                src={path + movie.poster_path}
+                style={{
+                  height: '250px',
+                  objectFit: 'contain',
+                  width: '100%',
+                }}
+              ></Card.Img>
+              <Card.Body>
+                <Card.Title>
+                  {movie.title.length > 20
+                    ? movie.title.slice(0, 20) + '...'
+                    : movie.title}
+                </Card.Title>
+                <Card.Text>
+                  {movie.overview
+                    ? movie.overview.slice(0, 50) + '...'
+                    : 'No Description.'}
+                </Card.Text>
+                <Link to={`/movie/${movie.id}`}>
+                  <Button variant="primary">Go Detail</Button>
+                </Link>
+              </Card.Body>
+            </Card>
+          </Col>
+        ))}
+      </Row>
+    </Container>
   );
 };
 

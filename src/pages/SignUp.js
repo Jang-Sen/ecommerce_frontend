@@ -31,7 +31,7 @@ const SignUp = () => {
             <Form.Label>User name</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Enter Username"
+              placeholder="Username"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
@@ -41,7 +41,7 @@ const SignUp = () => {
             <Form.Label>Email address</Form.Label>
             <Form.Control
               type="email"
-              placeholder="Enter email"
+              placeholder="Email(example@email.com)"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -51,7 +51,7 @@ const SignUp = () => {
             <Form.Label>Phone</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Enter Phone"
+              placeholder="010-0000-0000"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
             />
