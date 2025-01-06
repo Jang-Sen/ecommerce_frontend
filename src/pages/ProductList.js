@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Button, Card, Col, Container, Row } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -37,7 +38,9 @@ const ProductList = () => {
                 <Card.Title>{product.name}</Card.Title>
                 <Card.Text>{product.description.slice(0, 10)} ...</Card.Text>
                 <Card.Text>${product.price}</Card.Text>
-                <Button variant="primary">Go somewhere</Button>
+                <Link to={`/product/${product.id}`}>
+                  <Button variant="primary">Go somewhere</Button>
+                </Link>
               </Card.Body>
             </Card>
           </Col>
