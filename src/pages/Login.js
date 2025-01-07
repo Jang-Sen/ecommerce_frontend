@@ -68,7 +68,7 @@ const Login = () => {
           <Form.Group className="mb-3" controlId="formBasicCheckbox">
             <Form.Check type="checkbox" label="Check me out" />
           </Form.Group>
-          <Link to={'/'}>비밀번호 재설정</Link> /
+          <Link to={'/password'}>Change Password</Link> /
           <Link to={'/signup'}> Sign Up</Link>
           <br />
           <Button variant="primary" type="submit">

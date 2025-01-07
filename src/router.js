@@ -4,6 +4,7 @@ import NotFound from './pages/NotFound';
 import ProductList from './pages/ProductList';
 import ProductDetail from './pages/ProductDetail';
 import { Login, MovieDetail, MovieList, SignUp } from './pages';
+import PasswordChange from './pages/PasswordChange';
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
       {
         path: '/signup',
         element: <SignUp />,
+      },
+      {
+        path: '/password',
+        element: <PasswordChange />,
       },
     ],
   },
