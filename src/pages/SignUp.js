@@ -92,7 +92,7 @@ const SignUp = () => {
               disabled={emailValidate}
             />
             <Button
-              variant="secondary"
+              variant={emailValidate ? 'success' : 'primary'}
               className={'mt-2'}
               onClick={sendValidateEmail}
               disabled={emailValidate}
@@ -112,7 +112,7 @@ const SignUp = () => {
                 required
               />
               <Button
-                variant="secondary"
+                variant="outline-primary"
                 className={'mt-2'}
                 onClick={validateOtp}
               >

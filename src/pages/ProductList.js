@@ -41,8 +41,8 @@ const ProductList = () => {
               <Card.Body>
                 <Card.Title>{product.name}</Card.Title>
                 <Card.Text>
-                  {product.description.length > 30
-                    ? product.description.slice(0, 30) + '...'
+                  {product.description.length > 20
+                    ? product.description.slice(0, 20) + '...'
                     : product.description}
                 </Card.Text>
                 <Card.Text>$ {product.price}</Card.Text>

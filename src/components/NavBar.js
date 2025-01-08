@@ -8,9 +8,11 @@ const NavBar = () => {
         <Navbar.Brand href="/">Jangwon-Ecommerce</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
+          <Nav className="me-auto" variant="underline">
             <Nav.Link href="/">Product</Nav.Link>
             <Nav.Link href="/movie">Movie</Nav.Link>
+          </Nav>
+          <Nav className="ms-auto" variant="underline">
             <Nav.Link href="/login">Login</Nav.Link>
             <Nav.Link href="/signup">Sign Up</Nav.Link>
           </Nav>

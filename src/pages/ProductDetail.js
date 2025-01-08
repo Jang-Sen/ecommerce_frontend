@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { Container, Row } from 'react-bootstrap';
+import { Col, Container, Image, Row } from 'react-bootstrap';
 
 const ProductDetail = () => {
   const params = useParams();
@@ -22,8 +22,24 @@ const ProductDetail = () => {
     getProduct();
   }, [params]);
   return (
-    <Container className={'mt-3'}>
-      <Row>{product.name}</Row>
+    <Container className={'mt-5'}>
+      <Row>
+        <Col md={5}>
+          <Image
+            src={product.productImg}
+            alt={product.name}
+            fluid
+            className="rounded shadow"
+          />
+        </Col>
+
+        <Col md={6}>
+          <h2>{product.name}</h2>
+          <p className="text-muted">{product.category}</p>
+          <h5 className="text-muted">{`$ ${product.price}`}</h5>
+          <p>{product.description}</p>
+        </Col>
+      </Row>
     </Container>
   );
 };

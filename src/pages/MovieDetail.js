@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { Col, Container, Image, Row } from 'react-bootstrap';
 
 const MovieDetail = () => {
   const params = useParams();
@@ -30,7 +31,32 @@ const MovieDetail = () => {
     getMovie();
   }, []);
 
-  return <div>{movie.original_title}</div>;
+  return (
+    <Container className={'mt-5'}>
+      <Row>
+        <Col md={5}>
+          <Image
+            src={`https://image.tmdb.org/t/p/w500` + movie.poster_path}
+            alt={movie.id}
+            fluid
+            className="rounded shadow"
+          />
+        </Col>
+
+        <Col md={6}>
+          <h2>{movie.title}</h2>
+          {movie.status}
+          <p>Run Time: {movie.runtime}</p>
+          <p className="text-muted">{movie.popularity}</p>
+          <p className="text-muted">{movie.release_date}</p>
+          <p>
+            <h5>Over View</h5>
+            {movie.overview}
+          </p>
+        </Col>
+      </Row>
+    </Container>
+  );
 };
 
 export default MovieDetail;
