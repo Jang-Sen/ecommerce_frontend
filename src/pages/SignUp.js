@@ -11,6 +11,14 @@ const SignUp = () => {
   const [otp, setOtp] = useState('');
   const [emailValidate, setEmailValidate] = useState(false);
 
+  const [terms, setTerms] = useState({
+    agreeOfTerm: false,
+    overFourteen: false,
+    agreeOfPersonalInfo: false,
+    agreeOfMarketing: false,
+    agreeOfEvent: false,
+  });
+
   // 이메일 인증
   const sendValidateEmail = async () => {
     try {
@@ -47,11 +55,20 @@ const SignUp = () => {
       alert('Please validate your email.');
     }
 
+    if (
+      !terms.agreeOfTerm ||
+      !terms.overFourteen ||
+      !terms.agreeOfPersonalInfo
+    ) {
+      alert('Please Agree Terms');
+    }
+
     const userInput = {
       username: name,
       email,
       password,
       phone,
+      agreeOfTerm: terms,
     };
 
     try {
@@ -156,6 +173,76 @@ const SignUp = () => {
 
           <Form.Group className="mb-3" controlId="formBasicCheckbox">
             <Form.Check type="checkbox" label="Check me out" />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formTerms">
+            <Form.Label>Agree Of Term</Form.Label>
+            <Form.Check
+              type="checkbox"
+              label={<span className="text-danger">Agree Of Term</span>}
+              checked={terms.agreeOfTerm}
+              onChange={(event) =>
+                setTerms((prevTerms) => ({
+                  ...prevTerms,
+                  agreeOfTerm: event.target.checked,
+                }))
+              }
+              required
+            />
+
+            <Form.Check
+              type="checkbox"
+              label={<span className="text-danger">Over Fourteen</span>}
+              checked={terms.overFourteen}
+              onChange={(event) =>
+                setTerms((prevTerms) => ({
+                  ...prevTerms,
+                  overFourteen: event.target.checked,
+                }))
+              }
+              required
+            />
+
+            <Form.Check
+              type="checkbox"
+              label={
+                <span className="text-danger">Agree Of Personal Info</span>
+              }
+              checked={terms.agreeOfPersonalInfo}
+              onChange={(event) =>
+                setTerms((prevTerms) => ({
+                  ...prevTerms,
+                  agreeOfPersonalInfo: event.target.checked,
+                }))
+              }
+              required
+            />
+
+            <Form.Check
+              type="checkbox"
+              label="Agree Of Event"
+              checked={terms.agreeOfEvent}
+              onChange={(event) =>
+                setTerms((prevTerms) => ({
+                  ...prevTerms,
+                  agreeOfEvent: event.target.checked,
+                }))
+              }
+              required
+            />
+
+            <Form.Check
+              type="checkbox"
+              label="Agree Of Marketing"
+              checked={terms.agreeOfMarketing}
+              onChange={(event) =>
+                setTerms((prevTerms) => ({
+                  ...prevTerms,
+                  agreeOfMarketing: event.target.checked,
+                }))
+              }
+              required
+            />
           </Form.Group>
           <Button variant="primary" type="submit">
             Submit
