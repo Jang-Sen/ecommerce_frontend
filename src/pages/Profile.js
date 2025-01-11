@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Button, Col, Container, Form, Image, Row } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
+  const navigate = useNavigate();
   // console.log(localStorage.getItem('token'));
   const [userInfo, setUserInfo] = useState({});
   const [newImage, setNewImage] = useState(null);
@@ -33,14 +35,24 @@ const Profile = () => {
         config,
       );
 
-      console.log(data);
+      if (status === 200) {
+        setUserInfo(data.body);
+      }
+
+      console.log('______________________________', data);
       console.log(status);
     } catch (err) {
       console.log(err.message);
     }
   };
 
-  useEffect(() => {}, [newImage]);
+  useEffect(() => {
+    getUserInfo();
+
+    if (!localStorage.getItem('token')) {
+      navigate('/login');
+    }
+  }, []);
 
   const getUserInfo = async () => {
     try {
@@ -65,10 +77,6 @@ const Profile = () => {
       console.log(err.message);
     }
   };
-
-  useEffect(() => {
-    getUserInfo();
-  }, []);
 
   return (
     <Container className="mb-5">
