@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Container, FloatingLabel, Form, Row } from 'react-bootstrap';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
@@ -35,6 +35,12 @@ const Login = () => {
       console.log(e);
     }
   };
+
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      navigate('/profile');
+    }
+  }, []);
 
   return (
     <Container className={'mt-5'}>

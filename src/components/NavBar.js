@@ -11,6 +11,8 @@ const NavBar = () => {
     navigate('/login');
   };
 
+  console.log(localStorage.getItem('token'));
+
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
@@ -22,9 +24,14 @@ const NavBar = () => {
             <Nav.Link href="/movie">Movie</Nav.Link>
           </Nav>
           <Nav className="ms-auto" variant="underline">
-            <Nav.Link href="/login">Login</Nav.Link>
-            <Nav.Link onClick={logoutHandler}>Logout</Nav.Link>
-            <Nav.Link href="/signup">Sign Up</Nav.Link>
+            {localStorage.getItem('token') ? (
+              <Nav.Link onClick={logoutHandler}>Logout</Nav.Link>
+            ) : (
+              <>
+                <Nav.Link href="/login">Login</Nav.Link>
+                <Nav.Link href="/signup">Sign Up</Nav.Link>
+              </>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>
