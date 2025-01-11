@@ -1,7 +1,16 @@
 import React from 'react';
 import { Container, Nav, Navbar } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 const NavBar = () => {
+  const navigate = useNavigate();
+
+  const logoutHandler = () => {
+    localStorage.removeItem('token');
+
+    navigate('/login');
+  };
+
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
@@ -14,6 +23,7 @@ const NavBar = () => {
           </Nav>
           <Nav className="ms-auto" variant="underline">
             <Nav.Link href="/login">Login</Nav.Link>
+            <Nav.Link onClick={logoutHandler}>Logout</Nav.Link>
             <Nav.Link href="/signup">Sign Up</Nav.Link>
           </Nav>
         </Navbar.Collapse>
