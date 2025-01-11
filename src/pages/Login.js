@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Button, Container, FloatingLabel, Form, Row } from 'react-bootstrap';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Login = () => {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -20,8 +22,15 @@ const Login = () => {
         'http://localhost/api/v1/auth/login',
         userInput,
       );
-      console.log(data);
-      console.log(status);
+
+      if (status === 200) {
+        console.log(data.accessToken);
+        console.log(status);
+
+        localStorage.setItem('token', data.accessToken);
+
+        navigate('/profile');
+      }
     } catch (e) {
       console.log(e);
     }
