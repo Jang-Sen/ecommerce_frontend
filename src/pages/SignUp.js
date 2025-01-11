@@ -1,8 +1,23 @@
 import React, { useState } from 'react';
-import { Button, Container, Form, Row } from 'react-bootstrap';
+import { Button, Container, Form, InputGroup, Row } from 'react-bootstrap';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
+// 체크박스 항목 데이터
+const agreementItems = [
+  { key: 'overFourteen', label: '만 14세 이상 (필수)' },
+  { key: 'agreeOfTerm', label: '이용약관 (필수)' },
+  { key: 'agreeOfPersonalInfo', label: '개인정보 수집 및 이용 동의 (필수)' },
+  { key: 'agreeOfMarketing', label: '개인정보 마케팅 활용 동의 (선택)' },
+  {
+    key: 'agreeOfEvent',
+    label: '이벤트, 쿠폰, 특가 알림 메일 및 SMS 등 수신 (선택)',
+  },
+];
 
 const SignUp = () => {
+  const navigate = useNavigate();
+
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -10,19 +25,49 @@ const SignUp = () => {
   const [phone, setPhone] = useState('');
   const [otp, setOtp] = useState('');
   const [emailValidate, setEmailValidate] = useState(false);
+  const [otpShow, setOtpShow] = useState(false);
 
-  const [terms, setTerms] = useState({
-    agreeOfTerm: false,
-    overFourteen: false,
-    agreeOfPersonalInfo: false,
-    agreeOfMarketing: false,
-    agreeOfEvent: false,
-  });
+  // 초기 상태 설정 (전체 동의 포함)
+  const initialAgreements = Object.fromEntries([
+    ['all', false],
+    ...agreementItems.map((item) => [item.key, false]),
+  ]);
+
+  const [agreements, setAgreements] = useState(initialAgreements);
+
+  const handleAllCheck = () => {
+    const newValue = !agreements.all;
+    const updatedAgreements = { all: newValue };
+
+    agreementItems.forEach((item) => {
+      updatedAgreements[item.key] = newValue;
+    });
+
+    setAgreements(updatedAgreements);
+  };
+
+  // 개별 항목 체크/해제
+  const handleSingleCheck = (key) => {
+    const updatedAgreements = {
+      ...agreements,
+      [key]: !agreements[key],
+    };
+
+    // 모든 항목이 체크되었는지 확인
+    const allChecked = agreementItems.every(
+      (item) => updatedAgreements[item.key],
+    );
+
+    updatedAgreements.all = allChecked;
+
+    setAgreements(updatedAgreements);
+  };
 
   // 이메일 인증
   const sendValidateEmail = async () => {
     try {
       await axios.post('http://localhost/api/v1/auth/email/send', { email });
+      setOtpShow(true);
       alert('send email otp');
     } catch (e) {
       console.log(e);
@@ -38,6 +83,7 @@ const SignUp = () => {
     try {
       await axios.post('http://localhost/api/v1/auth/email/check', emailInput);
       setEmailValidate(true);
+      setOtpShow(!otpShow);
     } catch (e) {
       console.log(e);
     }
@@ -55,25 +101,24 @@ const SignUp = () => {
       alert('Please validate your email.');
     }
 
-    if (
-      !terms.agreeOfTerm ||
-      !terms.overFourteen ||
-      !terms.agreeOfPersonalInfo
-    ) {
-      alert('Please Agree Terms');
-    }
-
     const userInput = {
       username: name,
       email,
       password,
       phone,
-      agreeOfTerm: terms,
+      agreeOfTerm: agreements,
     };
 
     try {
-      await axios.post('http://localhost/api/v1/auth/signup', userInput);
-      alert('Success');
+      const { data, status } = await axios.post(
+        'http://localhost/api/v1/auth/signup',
+        userInput,
+      );
+
+      if (status === 201) {
+        alert('Success');
+        navigate('/login');
+      }
     } catch (e) {
       alert('Fail');
       console.log(e);
@@ -100,25 +145,37 @@ const SignUp = () => {
 
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Email address</Form.Label>
-            <Form.Control
-              type="email"
-              placeholder="Email(example@email.com)"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              disabled={emailValidate}
-            />
-            <Button
-              variant={emailValidate ? 'success' : 'primary'}
-              className={'mt-2'}
-              onClick={sendValidateEmail}
-              disabled={emailValidate}
-            >
-              {emailValidate ? 'Email Validated' : 'Send Validation Email'}
-            </Button>
+
+            <InputGroup className="mb-3">
+              <Form.Control
+                type="email"
+                placeholder="Email(example@email.com)"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                disabled={emailValidate}
+              />
+              <Button
+                variant="outline-secondary"
+                id="button-addon2"
+                onClick={sendValidateEmail}
+                disabled={emailValidate}
+              >
+                Send Email
+              </Button>
+            </InputGroup>
           </Form.Group>
 
-          {!emailValidate && (
+          {/* <Button*/}
+          {/*//   variant={emailValidate ? 'success' : 'primary'}*/}
+          {/*//   className={'mt-2'}*/}
+          {/*//   onClick={sendValidateEmail}*/}
+          {/*//   disabled={emailValidate}*/}
+          {/*// >*/}
+          {/*//   {emailValidate ? 'Email Validated' : 'Send Validation Email'}*/}
+          {/*// </Button>*/}
+
+          {otpShow ? (
             <Form.Group className={'mb-3'} controlId="formBasicValidate">
               <Form.Label>OTP</Form.Label>
               <Form.Control
@@ -136,7 +193,7 @@ const SignUp = () => {
                 Validate OTP
               </Button>
             </Form.Group>
-          )}
+          ) : null}
 
           <Form.Group className="mb-3" controlId="formBasicPhone">
             <Form.Label>Phone</Form.Label>
@@ -171,80 +228,28 @@ const SignUp = () => {
             />
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formBasicCheckbox">
-            <Form.Check type="checkbox" label="Check me out" />
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formTerms">
-            <Form.Label>Agree Of Term</Form.Label>
+          <Form.Group className="m-2 mt-4">
+            <Form.Label>약관 동의</Form.Label>
             <Form.Check
               type="checkbox"
-              label={<span className="text-danger">Agree Of Term</span>}
-              checked={terms.agreeOfTerm}
-              onChange={(event) =>
-                setTerms((prevTerms) => ({
-                  ...prevTerms,
-                  agreeOfTerm: event.target.checked,
-                }))
-              }
-              required
-            />
-
-            <Form.Check
-              type="checkbox"
-              label={<span className="text-danger">Over Fourteen</span>}
-              checked={terms.overFourteen}
-              onChange={(event) =>
-                setTerms((prevTerms) => ({
-                  ...prevTerms,
-                  overFourteen: event.target.checked,
-                }))
-              }
-              required
-            />
-
-            <Form.Check
-              type="checkbox"
-              label={
-                <span className="text-danger">Agree Of Personal Info</span>
-              }
-              checked={terms.agreeOfPersonalInfo}
-              onChange={(event) =>
-                setTerms((prevTerms) => ({
-                  ...prevTerms,
-                  agreeOfPersonalInfo: event.target.checked,
-                }))
-              }
-              required
-            />
-
-            <Form.Check
-              type="checkbox"
-              label="Agree Of Event"
-              checked={terms.agreeOfEvent}
-              onChange={(event) =>
-                setTerms((prevTerms) => ({
-                  ...prevTerms,
-                  agreeOfEvent: event.target.checked,
-                }))
-              }
-              required
-            />
-
-            <Form.Check
-              type="checkbox"
-              label="Agree Of Marketing"
-              checked={terms.agreeOfMarketing}
-              onChange={(event) =>
-                setTerms((prevTerms) => ({
-                  ...prevTerms,
-                  agreeOfMarketing: event.target.checked,
-                }))
-              }
-              required
+              label="전체 동의"
+              checked={agreements.all}
+              onChange={handleAllCheck}
             />
           </Form.Group>
-          <Button variant="primary" type="submit">
+
+          {agreementItems.map((item) => (
+            <Form.Group key={item.key} className="m-2">
+              <Form.Check
+                type="checkbox"
+                label={item.label}
+                checked={agreements[item.key]}
+                onChange={() => handleSingleCheck(item.key)}
+              />
+            </Form.Group>
+          ))}
+
+          <Button variant="primary" type="submit" className="mt-3">
             Submit
           </Button>
         </Form>
