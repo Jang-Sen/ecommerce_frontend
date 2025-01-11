@@ -5,6 +5,7 @@ import ProductList from './pages/ProductList';
 import ProductDetail from './pages/ProductDetail';
 import { Login, MovieDetail, MovieList, SignUp } from './pages';
 import PasswordChange from './pages/PasswordChange';
+import Profile from './pages/Profile';
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
       {
         path: '/password',
         element: <PasswordChange />,
+      },
+      {
+        path: '/profile',
+        element: <Profile />,
       },
     ],
   },
