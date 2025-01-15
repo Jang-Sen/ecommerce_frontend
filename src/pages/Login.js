@@ -43,12 +43,14 @@ const Login = () => {
   }, []);
 
   return (
-    <Container className={'mt-5'}>
-      <h1>Login</h1>
+    <Container
+      className={'mt-5'}
+      style={{ maxWidth: '500px', marginTop: '50px' }}
+    >
+      <h3>Login</h3>
       <Row className={'mt-4'}>
         <Form onSubmit={submitHandler}>
           <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label>Email address</Form.Label>
             <FloatingLabel
               controlId="floatingInput"
               label="Email"
@@ -61,12 +63,8 @@ const Login = () => {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </FloatingLabel>
-            <Form.Text className="text-muted">
-              We'll never share your email with anyone else.
-            </Form.Text>
           </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicPassword">
-            <Form.Label>Password</Form.Label>
             <FloatingLabel
               controlId="floatingInput"
               label="Password"
@@ -80,15 +78,18 @@ const Login = () => {
               />
             </FloatingLabel>
           </Form.Group>
-          <Form.Group className="mb-3" controlId="formBasicCheckbox">
-            <Form.Check type="checkbox" label="Check me out" />
-          </Form.Group>
-          <Link to={'/password'}>Change Password</Link> /
-          <Link to={'/signup'}> Sign Up</Link>
-          <br />
-          <Button variant="primary" type="submit">
-            Submit
+          <Button variant="primary" type="submit" className="w-100">
+            로그인
           </Button>
+          <Link
+            to={'/find/password'}
+            className="btn btn-outline-primary w-50 mt-2"
+          >
+            비밀번호 재설정
+          </Link>
+          <Link to={'/signup'} className="btn btn-outline-primary w-50 mt-2">
+            회원가입
+          </Link>
         </Form>
       </Row>
     </Container>

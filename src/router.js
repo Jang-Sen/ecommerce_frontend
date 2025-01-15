@@ -4,8 +4,9 @@ import NotFound from './pages/NotFound';
 import ProductList from './pages/ProductList';
 import ProductDetail from './pages/ProductDetail';
 import { Login, MovieDetail, MovieList, SignUp } from './pages';
-import PasswordChange from './pages/PasswordChange';
+import PasswordFind from './pages/PasswordFind';
 import Profile from './pages/Profile';
+import PasswordChange from './pages/PasswordChange';
 
 const router = createBrowserRouter([
   {
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
       {
         path: '/signup',
         element: <SignUp />,
+      },
+      {
+        path: '/find/password',
+        element: <PasswordFind />,
       },
       {
         path: '/change/password',
