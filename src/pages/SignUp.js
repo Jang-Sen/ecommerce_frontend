@@ -134,23 +134,17 @@ const SignUp = () => {
   }, []);
 
   return (
-    <Container className={'mt-5'}>
-      <h1>Sign Up</h1>
+    <Container
+      className={'mt-5'}
+      style={{ maxWidth: '500px', marginTop: '50px' }}
+    >
+      <h3>Sign Up</h3>
       <Row className={'mt-4'}>
         <Form onSubmit={signupHandler}>
-          <Form.Group className="mb-3" controlId="formBasicUsername">
-            <Form.Label>User name</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Username"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-          </Form.Group>
-
           <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label>Email address</Form.Label>
+            <Form.Label>
+              <strong>Email</strong>
+            </Form.Label>
 
             <InputGroup className="mb-3">
               <Form.Control
@@ -183,7 +177,9 @@ const SignUp = () => {
 
           {otpShow ? (
             <Form.Group className={'mb-3'} controlId="formBasicValidate">
-              <Form.Label>OTP</Form.Label>
+              <Form.Label>
+                <strong>OTP</strong>
+              </Form.Label>
               <Form.Control
                 type="text"
                 placeholder="000000"
@@ -201,19 +197,10 @@ const SignUp = () => {
             </Form.Group>
           ) : null}
 
-          <Form.Group className="mb-3" controlId="formBasicPhone">
-            <Form.Label>Phone</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="01095110662"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              required
-            />
-          </Form.Group>
-
           <Form.Group className="mb-3" controlId="formBasicPassword">
-            <Form.Label>Password</Form.Label>
+            <Form.Label>
+              <strong>Password</strong>
+            </Form.Label>
             <Form.Control
               type="password"
               placeholder="Password"
@@ -224,7 +211,9 @@ const SignUp = () => {
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formBasicConfirmPassword">
-            <Form.Label>Confirm Password</Form.Label>
+            <Form.Label>
+              <strong>Confirm Password</strong>
+            </Form.Label>
             <Form.Control
               type="password"
               placeholder="Confirm Password"
@@ -234,11 +223,46 @@ const SignUp = () => {
             />
           </Form.Group>
 
+          <Form.Group className="mb-3" controlId="formBasicUsername">
+            <Form.Label>
+              <strong>Name</strong>
+            </Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Username"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formBasicPhone">
+            <Form.Label>
+              <strong>Phone</strong>
+            </Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="01095110662"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              required
+            />
+          </Form.Group>
+
           <Form.Group className="m-2 mt-4">
-            <Form.Label>약관 동의</Form.Label>
+            <Form.Label>
+              <strong>약관 동의</strong>
+            </Form.Label>
             <Form.Check
               type="checkbox"
-              label="전체 동의"
+              label={
+                <>
+                  <strong>전체 동의 </strong>
+                  <text style={{ color: 'gray', fontSize: 'small' }}>
+                    선택항목에 대한 동의 포함
+                  </text>
+                </>
+              }
               checked={agreements.all}
               onChange={handleAllCheck}
             />
