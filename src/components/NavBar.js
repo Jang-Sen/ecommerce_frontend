@@ -14,16 +14,19 @@ const NavBar = () => {
   console.log(localStorage.getItem('token'));
 
   return (
-    <Navbar expand="lg" className="bg-body-tertiary">
+    <Navbar bg="light" expand="lg" className="shadow-sm">
       <Container>
-        <Navbar.Brand href="/">Jangwon-Ecommerce</Navbar.Brand>
+        <Navbar.Brand href="/" className="fw-bold">
+          Jangwon Ecommerce
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto" variant="underline">
+          <Nav className="me-auto">
+            <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="/">Product</Nav.Link>
             <Nav.Link href="/movie">Movie</Nav.Link>
           </Nav>
-          <Nav className="ms-auto" variant="underline">
+          <Nav>
             {localStorage.getItem('token') ? (
               <Nav.Link onClick={logoutHandler}>Logout</Nav.Link>
             ) : (

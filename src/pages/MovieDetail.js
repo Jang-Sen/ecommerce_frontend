@@ -45,8 +45,10 @@ const MovieDetail = () => {
 
         <Col md={6}>
           <h2>{movie.title}</h2>
-          {movie.status}
-          <p>Run Time: {movie.runtime}</p>
+          <strong>{movie.status}</strong>
+          <p>
+            <strong>Run Time:</strong> {movie.runtime} M
+          </p>
           <p className="text-muted">{movie.popularity}</p>
           <p className="text-muted">{movie.release_date}</p>
           <p>
