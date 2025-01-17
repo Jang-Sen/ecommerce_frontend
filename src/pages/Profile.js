@@ -10,21 +10,9 @@ const Profile = () => {
   const [userProfile, setUserProfile] = useState({});
   const [newImage, setNewImage] = useState(null);
 
-  const handleUserInput = (e) => {
-    const { name, value } = e.target;
-
-    if (name in userInfo) {
-      setUserInfo((prevState) => ({
-        ...prevState,
-        [name]: value,
-      }));
-    } else if (name in userProfile) {
-      setUserProfile((prevState) => ({
-        ...prevState,
-        [name]: value,
-      }));
-    }
-  };
+  const formattedBirth = userProfile.birth
+    ? new Date(userProfile.birth).toISOString().split('T')[0]
+    : '';
 
   const handleFileChange = (e) => {
     setNewImage(e.target.files[0]);
@@ -154,7 +142,12 @@ const Profile = () => {
               />
             </Form.Group>
 
-            <Button type="submit" variant="outline-primary" className="w-100">
+            <Button
+              type="submit"
+              variant="outline-primary"
+              className="w-100"
+              disabled={!newImage}
+            >
               이미지 업데이트
             </Button>
           </Form>
@@ -205,9 +198,12 @@ const Profile = () => {
               <Form.Control
                 type="date"
                 name="birth"
-                value={userProfile.birth}
+                value={formattedBirth}
                 onChange={(event) =>
-                  setUserProfile({ birth: event.target.value })
+                  setUserProfile((prevState) => ({
+                    ...prevState,
+                    birth: event.target.value,
+                  }))
                 }
               />
             </Form.Group>
@@ -224,7 +220,10 @@ const Profile = () => {
                 value={userProfile.introduce}
                 placeholder="짧은 글로 자신을 소개해보세요. (최대 50자)"
                 onChange={(event) =>
-                  setUserProfile({ introduce: event.target.value })
+                  setUserProfile((prevState) => ({
+                    ...prevState,
+                    introduce: event.target.value,
+                  }))
                 }
               />
             </Form.Group>
@@ -237,7 +236,10 @@ const Profile = () => {
                 value={userProfile.snsLink}
                 placeholder="https://www.example.com"
                 onChange={(event) =>
-                  setUserProfile({ snsLink: event.target.value })
+                  setUserProfile((prevState) => ({
+                    ...prevState,
+                    snsLink: event.target.value,
+                  }))
                 }
               />
             </Form.Group>
