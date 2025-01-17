@@ -159,7 +159,7 @@ const SignUp = () => {
                 variant="outline-secondary"
                 id="button-addon2"
                 onClick={sendValidateEmail}
-                disabled={emailValidate}
+                disabled={emailValidate || !email}
               >
                 Send Email
               </Button>
