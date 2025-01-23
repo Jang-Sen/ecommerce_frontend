@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Container, Form, InputGroup, Row } from 'react-bootstrap';
+import {
+  Button,
+  Container,
+  Form,
+  Image,
+  InputGroup,
+  Row,
+} from 'react-bootstrap';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -26,6 +33,42 @@ const SignUp = () => {
   const [otp, setOtp] = useState('');
   const [emailValidate, setEmailValidate] = useState(false);
   const [otpShow, setOtpShow] = useState(false);
+
+  // 소셜
+  const socialMenus = [
+    {
+      id: 1,
+      name: 'google',
+      image: '/images/web_light_sq_SU@2x.png',
+    },
+    {
+      id: 2,
+      name: 'naver',
+      image: '/images/btnG_축약형.png',
+    },
+    {
+      id: 3,
+      name: 'kakao',
+      image: '/images/kakao_login_large.png',
+    },
+  ];
+
+  // 소셜 로그인 핸들러
+  const socialLoginHandler = async (platform) => {
+    const socialUrl = {
+      google: 'http://localhost/api/v1/auth/google',
+      naver: 'http://localhost/api/v1/auth/naver',
+      kakao: 'http://localhost/api/v1/auth/kakao',
+    };
+
+    const redirectUrl = socialUrl[platform];
+
+    if (redirectUrl) {
+      window.location.href = redirectUrl;
+    } else {
+      console.log('소셜 로그인 실패');
+    }
+  };
 
   // 초기 상태 설정 (전체 동의 포함)
   const initialAgreements = Object.fromEntries([
@@ -139,7 +182,45 @@ const SignUp = () => {
       style={{ maxWidth: '500px', marginTop: '50px' }}
     >
       <h3>Sign Up</h3>
-      <Row className={'mt-4'}>
+      <Row className={'m-4'}>
+        <text
+          style={{
+            fontSize: 'smaller',
+            color: 'GrayText',
+            textAlign: 'center',
+          }}
+        >
+          SNS 계정으로 간편하게 회원가입
+        </text>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            gap: '10px',
+            margin: '15px 0',
+          }}
+        >
+          {socialMenus.map((menu, index) => (
+            <Button
+              key={menu.id}
+              onClick={() => socialLoginHandler(menu.name)}
+              style={{
+                border: 'none',
+                background: 'transparent',
+                marginBottom: '10px',
+                cursor: 'pointer',
+                borderRadius: '5px',
+              }}
+            >
+              <Image
+                src={menu.image}
+                alt={menu.name}
+                style={{ width: '150px', height: '50px' }}
+              />
+            </Button>
+          ))}
+        </div>
+
         <Form onSubmit={signupHandler}>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>
