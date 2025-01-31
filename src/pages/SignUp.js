@@ -56,9 +56,9 @@ const SignUp = () => {
   // 소셜 로그인 핸들러
   const socialLoginHandler = async (platform) => {
     const socialUrl = {
-      google: 'http://localhost/api/v1/auth/google',
-      naver: 'http://localhost/api/v1/auth/naver',
-      kakao: 'http://localhost/api/v1/auth/kakao',
+      google: 'http://211.49.53.89/api/v1/auth/google',
+      naver: 'http://211.49.53.89/api/v1/auth/naver',
+      kakao: 'http://211.49.53.89/api/v1/auth/kakao',
     };
 
     const redirectUrl = socialUrl[platform];
@@ -109,7 +109,7 @@ const SignUp = () => {
   // 이메일 인증
   const sendValidateEmail = async () => {
     try {
-      await axios.post('http://localhost/api/v1/auth/email/send', { email });
+      await axios.post('http://211.49.53.89/api/v1/auth/email/send', { email });
       setOtpShow(true);
       alert('send email otp');
     } catch (e) {
@@ -124,7 +124,10 @@ const SignUp = () => {
       code: otp,
     };
     try {
-      await axios.post('http://localhost/api/v1/auth/email/check', emailInput);
+      await axios.post(
+        'http://211.49.53.89/api/v1/auth/email/check',
+        emailInput,
+      );
       setEmailValidate(true);
       setOtpShow(!otpShow);
     } catch (e) {
@@ -154,7 +157,7 @@ const SignUp = () => {
 
     try {
       const { data, status } = await axios.post(
-        'http://localhost/api/v1/auth/signup',
+        'http://211.49.53.89/api/v1/auth/signup',
         userInput,
       );
 

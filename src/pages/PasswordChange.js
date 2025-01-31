@@ -26,7 +26,7 @@ const PasswordChange = () => {
 
     try {
       const response = await axios.post(
-        'http://localhost/api/v1/auth/change/password',
+        'http://211.49.53.89/api/v1/auth/change/password',
         {
           token,
           password: newPassword,

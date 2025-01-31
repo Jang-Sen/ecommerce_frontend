@@ -16,7 +16,7 @@ const PasswordFind = () => {
   const emailCheckHandler = async () => {
     try {
       const response = await axios.get(
-        `http://localhost/api/v1/user/check/${email}`,
+        `http://211.49.53.89/api/v1/user/check/${email}`,
       );
 
       if (response.status === 200) {
@@ -35,7 +35,7 @@ const PasswordFind = () => {
 
     try {
       const response = await axios.post(
-        'http://localhost/api/v1/auth/find/password',
+        'http://211.49.53.89/api/v1/auth/find/password',
         { email },
       );
 
