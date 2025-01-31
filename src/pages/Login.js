@@ -19,7 +19,7 @@ const Login = () => {
 
     try {
       const { data, status } = await axios.post(
-        'http://211.49.53.89/api/v1/auth/login',
+        'http://211.49.53.89:8000/api/v1/auth/login',
         userInput,
       );
 

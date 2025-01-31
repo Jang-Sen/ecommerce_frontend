@@ -109,7 +109,9 @@ const SignUp = () => {
   // 이메일 인증
   const sendValidateEmail = async () => {
     try {
-      await axios.post('http://211.49.53.89/api/v1/auth/email/send', { email });
+      await axios.post('http://211.49.53.89:8000/api/v1/auth/email/send', {
+        email,
+      });
       setOtpShow(true);
       alert('send email otp');
     } catch (e) {
@@ -125,7 +127,7 @@ const SignUp = () => {
     };
     try {
       await axios.post(
-        'http://211.49.53.89/api/v1/auth/email/check',
+        'http://211.49.53.89:8000/api/v1/auth/email/check',
         emailInput,
       );
       setEmailValidate(true);
@@ -157,7 +159,7 @@ const SignUp = () => {
 
     try {
       const { data, status } = await axios.post(
-        'http://211.49.53.89/api/v1/auth/signup',
+        'http://211.49.53.89:8000/api/v1/auth/signup',
         userInput,
       );
 
