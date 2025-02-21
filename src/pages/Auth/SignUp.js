@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Button,
   Container,
@@ -6,25 +6,14 @@ import {
   Image,
   InputGroup,
   Row,
+  Spinner,
 } from 'react-bootstrap';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-
-// 체크박스 항목 데이터
-const agreementItems = [
-  { key: 'overFourteen', label: '만 14세 이상 (필수)' },
-  { key: 'agreeOfTerm', label: '이용약관 (필수)' },
-  { key: 'agreeOfPersonalInfo', label: '개인정보 수집 및 이용 동의 (필수)' },
-  { key: 'agreeOfMarketing', label: '개인정보 마케팅 활용 동의 (선택)' },
-  {
-    key: 'agreeOfEvent',
-    label: '이벤트, 쿠폰, 특가 알림 메일 및 SMS 등 수신 (선택)',
-  },
-];
+import { agreementItems, socialMenus } from '../../common';
+import { useSignup } from '../../hooks/useAuthentication';
+import { useEmailCheck, useEmailSend } from '../../hooks/useVerification';
+import { useGoogleLogin } from '../../hooks/useSocialLogin';
 
 const SignUp = () => {
-  const navigate = useNavigate();
-
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -34,40 +23,28 @@ const SignUp = () => {
   const [emailValidate, setEmailValidate] = useState(false);
   const [otpShow, setOtpShow] = useState(false);
 
-  // 소셜
-  const socialMenus = [
-    {
-      id: 1,
-      name: 'google',
-      image: '/images/web_light_sq_SU@2x.png',
-    },
-    {
-      id: 2,
-      name: 'naver',
-      image: '/images/btnG_축약형.png',
-    },
-    {
-      id: 3,
-      name: 'kakao',
-      image: '/images/kakao_login_large.png',
-    },
-  ];
+  const signupMutation = useSignup();
+  const emailSendMutation = useEmailSend();
+  const emailCheckMutation = useEmailCheck();
+  const googleLoginMutation = useGoogleLogin();
 
   // 소셜 로그인 핸들러
   const socialLoginHandler = async (platform) => {
-    const socialUrl = {
-      google: 'http://211.49.53.89/api/v1/auth/google',
-      naver: 'http://211.49.53.89/api/v1/auth/naver',
-      kakao: 'http://211.49.53.89/api/v1/auth/kakao',
-    };
+    googleLoginMutation.mutate();
 
-    const redirectUrl = socialUrl[platform];
-
-    if (redirectUrl) {
-      window.location.href = redirectUrl;
-    } else {
-      console.log('소셜 로그인 실패');
-    }
+    // const socialUrl = {
+    //   google: 'http://211.49.53.89/api/v1/auth/google',
+    //   naver: 'http://211.49.53.89/api/v1/auth/naver',
+    //   kakao: 'http://211.49.53.89/api/v1/auth/kakao',
+    // };
+    //
+    // const redirectUrl = socialUrl[platform];
+    //
+    // if (redirectUrl) {
+    //   window.location.href = redirectUrl;
+    // } else {
+    //   console.log('소셜 로그인 실패');
+    // }
   };
 
   // 초기 상태 설정 (전체 동의 포함)
@@ -108,15 +85,15 @@ const SignUp = () => {
 
   // 이메일 인증
   const sendValidateEmail = async () => {
-    try {
-      await axios.post('http://211.49.53.89:8000/api/v1/auth/email/send', {
-        email,
-      });
-      setOtpShow(true);
-      alert('send email otp');
-    } catch (e) {
-      console.log(e);
-    }
+    emailSendMutation.mutate(
+      { email },
+      {
+        onSuccess: () => {
+          setOtpShow(true);
+          alert('Please check your email.');
+        },
+      },
+    );
   };
 
   // 이메일로 전송한 otp 인증
@@ -125,16 +102,13 @@ const SignUp = () => {
       email,
       code: otp,
     };
-    try {
-      await axios.post(
-        'http://211.49.53.89:8000/api/v1/auth/email/check',
-        emailInput,
-      );
-      setEmailValidate(true);
-      setOtpShow(!otpShow);
-    } catch (e) {
-      console.log(e);
-    }
+
+    emailCheckMutation.mutate(emailInput, {
+      onSuccess: () => {
+        setEmailValidate(true);
+        setOtpShow(!otpShow);
+      },
+    });
   };
 
   // 회원가입
@@ -157,29 +131,8 @@ const SignUp = () => {
       agreeOfTerm: agreements,
     };
 
-    try {
-      const { data, status } = await axios.post(
-        'http://211.49.53.89:8000/api/v1/auth/signup',
-        userInput,
-      );
-
-      if (status === 201) {
-        alert('Success');
-        navigate('/login');
-      }
-    } catch (e) {
-      alert('Fail');
-      console.log(e);
-    }
-
-    console.log(userInput);
+    signupMutation.mutate(userInput);
   };
-
-  useEffect(() => {
-    if (localStorage.getItem('token')) {
-      navigate('/profile');
-    }
-  }, []);
 
   return (
     <Container
@@ -187,6 +140,11 @@ const SignUp = () => {
       style={{ maxWidth: '500px', marginTop: '50px' }}
     >
       <h3>Sign Up</h3>
+      {emailSendMutation.isPending && (
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      )}
       <Row className={'m-4'}>
         <text
           style={{
@@ -366,7 +324,7 @@ const SignUp = () => {
           ))}
 
           <Button variant="primary" type="submit" className="mt-3">
-            Submit
+            {signupMutation.isPending ? '회원 가입중' : '회원 가입'}
           </Button>
         </Form>
       </Row>

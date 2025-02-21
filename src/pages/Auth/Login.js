@@ -1,13 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Container, FloatingLabel, Form, Row } from 'react-bootstrap';
-import axios from 'axios';
+import {
+  Button,
+  Container,
+  FloatingLabel,
+  Form,
+  Row,
+  Spinner,
+} from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
+import { useLogin } from '../../hooks/useAuthentication';
 
 const Login = () => {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const loginMutation = useLogin();
 
   const submitHandler = async (e) => {
     e.preventDefault(); // 이벤트 발생
@@ -17,23 +26,25 @@ const Login = () => {
       password,
     };
 
-    try {
-      const { data, status } = await axios.post(
-        'http://211.49.53.89:8000/api/v1/auth/login',
-        userInput,
-      );
+    loginMutation.mutate(userInput);
 
-      if (status === 200) {
-        console.log(data.accessToken);
-        console.log(status);
-
-        localStorage.setItem('token', data.accessToken);
-
-        navigate('/profile');
-      }
-    } catch (e) {
-      console.log(e);
-    }
+    // try {
+    //   const { data, status } = await axios.post(
+    //     'http://211.49.53.89:8000/api/v1/auth/login',
+    //     userInput,
+    //   );
+    //
+    //   if (status === 200) {
+    //     console.log(data.accessToken);
+    //     console.log(status);
+    //
+    //     localStorage.setItem('token', data.accessToken);
+    //
+    //     navigate('/profile');
+    //   }
+    // } catch (e) {
+    //   console.log(e);
+    // }
   };
 
   useEffect(() => {
@@ -48,6 +59,11 @@ const Login = () => {
       style={{ maxWidth: '500px', marginTop: '50px' }}
     >
       <h3>Login</h3>
+      {loginMutation.isPending && (
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      )}
       <Row className={'mt-4'}>
         <Form onSubmit={submitHandler}>
           <Form.Group className="mb-3" controlId="formBasicEmail">

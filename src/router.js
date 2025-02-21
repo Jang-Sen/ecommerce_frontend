@@ -3,10 +3,11 @@ import App from './App';
 import NotFound from './pages/NotFound';
 import ProductList from './pages/ProductList';
 import ProductDetail from './pages/ProductDetail';
-import { Login, MovieDetail, MovieList, SignUp } from './pages';
-import PasswordFind from './pages/PasswordFind';
+import { MovieDetail, MovieList } from './pages';
+import PasswordFind from './pages/Auth/PasswordFind';
 import Profile from './pages/Profile';
-import PasswordChange from './pages/PasswordChange';
+import PasswordChange from './pages/Auth/PasswordChange';
+import { Login, SignUp } from './pages/Auth';
 
 const router = createBrowserRouter([
   {
