@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Container, Form, InputGroup, Row } from 'react-bootstrap';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { usePasswordFind } from '../../hooks/useResetPassword';
 
 const PasswordFind = () => {
   // const [step, setStep] = useState(1);
@@ -10,46 +9,32 @@ const PasswordFind = () => {
   // const [newPassword, setNewPassword] = useState('');
   // const [confirmPassword, setConfirmPassword] = useState('');
   const [emailVerified, setEmailVerified] = useState(false);
-  const navigate = useNavigate();
 
-  // 이메일 확인 요청
-  const emailCheckHandler = async () => {
-    try {
-      const response = await axios.get(
-        `http://211.49.53.89/api/v1/user/check/${email}`,
-      );
-
-      if (response.status === 200) {
-        setEmailVerified(true);
-        console.log('이메일 확인 성공');
-      }
-    } catch (err) {
-      console.error(err);
-      console.log('이메일 확인 실패');
-    }
-  };
+  const passwordFindMutation = usePasswordFind();
 
   // 이메일 인증 요청
-  const emailValidateHandler = async () => {
-    // e.preventDefault();
+  const emailValidateHandler = async (e) => {
+    e.preventDefault();
 
-    try {
-      const response = await axios.post(
-        'http://211.49.53.89/api/v1/auth/find/password',
-        { email },
-      );
+    passwordFindMutation.mutate({ email });
 
-      alert(response.data);
-
-      if (response.status === 200) {
-        console.log('이메일 토큰 전송 완료');
-      }
-    } catch (e) {
-      console.log(e);
-      console.log('전송 실패');
-    }
-
-    console.log(email);
+    // try {
+    //   const response = await axios.post(
+    //     'http://localhost/api/v1/auth/find/password',
+    //     { email },
+    //   );
+    //
+    //   alert(response.data);
+    //
+    //   if (response.status === 200) {
+    //     console.log('이메일 토큰 전송 완료');
+    //   }
+    // } catch (e) {
+    //   console.log(e);
+    //   console.log('전송 실패');
+    // }
+    //
+    // console.log(email);
   };
 
   // 비밀번호 변경 요청
@@ -100,16 +85,6 @@ const PasswordFind = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={emailVerified}
               />
-
-              <Button
-                name="emailCheckBtn"
-                variant="outline-primary"
-                className="w-auto"
-                onClick={emailCheckHandler}
-                disabled={!email || emailVerified}
-              >
-                확인
-              </Button>
             </InputGroup>
           </Form.Group>
 
@@ -118,7 +93,6 @@ const PasswordFind = () => {
             type="submit"
             className="w-100"
             onClick={emailValidateHandler}
-            disabled={!emailVerified}
           >
             이메일로 인증코드 받기
           </Button>

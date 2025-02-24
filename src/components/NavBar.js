@@ -1,14 +1,12 @@
 import React from 'react';
 import { Container, Nav, Navbar } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
 
 const NavBar = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const logoutHandler = () => {
-    localStorage.removeItem('token');
-
-    navigate('/login');
+    // localStorage.removeItem('token');
+    // navigate('/login');
   };
 
   console.log(localStorage.getItem('token'));
@@ -26,16 +24,16 @@ const NavBar = () => {
             <Nav.Link href="/">Product</Nav.Link>
             <Nav.Link href="/movie">Movie</Nav.Link>
           </Nav>
-          <Nav>
-            {localStorage.getItem('token') ? (
-              <Nav.Link onClick={logoutHandler}>Logout</Nav.Link>
-            ) : (
-              <>
-                <Nav.Link href="/login">Login</Nav.Link>
-                <Nav.Link href="/signup">Sign Up</Nav.Link>
-              </>
-            )}
-          </Nav>
+          {/*<Nav>*/}
+          {/*  {localStorage.getItem('token') ? (*/}
+          {/*    <Nav.Link onClick={logoutHandler}>Logout</Nav.Link>*/}
+          {/*  ) : (*/}
+          {/*    <>*/}
+          {/*      <Nav.Link href="/login">Login</Nav.Link>*/}
+          {/*      <Nav.Link href="/signup">Sign Up</Nav.Link>*/}
+          {/*    </>*/}
+          {/*  )}*/}
+          {/*</Nav>*/}
         </Navbar.Collapse>
       </Container>
     </Navbar>

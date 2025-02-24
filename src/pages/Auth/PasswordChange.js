@@ -1,20 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Container, Form, Row } from 'react-bootstrap';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import axios from 'axios';
+import { useSearchParams } from 'react-router-dom';
+import { usePasswordChange } from '../../hooks/useResetPassword';
 
 const PasswordChange = () => {
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!token) {
-      navigate('/find/password');
-    }
-  }, []);
+  const passwordChangeMutation = usePasswordChange();
+
+  // useEffect(() => {
+  //   if (!token) {
+  //     navigate('/find/password');
+  //   }
+  // }, []);
 
   const changePasswordHandler = async (e) => {
     e.preventDefault();
@@ -24,25 +26,27 @@ const PasswordChange = () => {
       return;
     }
 
-    try {
-      const response = await axios.post(
-        'http://211.49.53.89/api/v1/auth/change/password',
-        {
-          token,
-          password: newPassword,
-        },
-      );
+    passwordChangeMutation.mutate({ token, password: newPassword });
 
-      console.log(response);
-
-      if (response.status === 201) {
-        console.log('비밀번호 변경 성공');
-        navigate('/login');
-      }
-    } catch (err) {
-      console.error(err);
-      console.log('비밀번호 변경 실패');
-    }
+    // try {
+    //   const response = await axios.post(
+    //     'http://211.49.53.89/api/v1/auth/change/password',
+    //     {
+    //       token,
+    //       password: newPassword,
+    //     },
+    //   );
+    //
+    //   console.log(response);
+    //
+    //   if (response.status === 201) {
+    //     console.log('비밀번호 변경 성공');
+    //     navigate('/login');
+    //   }
+    // } catch (err) {
+    //   console.error(err);
+    //   console.log('비밀번호 변경 실패');
+    // }
   };
 
   return (

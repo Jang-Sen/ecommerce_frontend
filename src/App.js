@@ -1,13 +1,16 @@
 import React from 'react';
-import { Outlet } from 'react-router-dom';
+import { RouterProvider } from 'react-router-dom';
 import NavBar from './components/NavBar';
+import { AuthProvider } from './context/authContext';
+import router from './router';
 
 const App = () => {
   return (
-    <>
+    <AuthProvider>
       <NavBar />
-      <Outlet />
-    </>
+      {/*<Outlet />*/}
+      <RouterProvider router={router} />
+    </AuthProvider>
   );
 };
 
