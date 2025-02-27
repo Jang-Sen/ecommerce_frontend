@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
+  Alert,
   Button,
   Container,
   FloatingLabel,
@@ -15,8 +16,12 @@ const Login = () => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [show, setShow] = useState(true);
 
   const loginMutation = useLogin();
+
+  console.log('Error: ', loginMutation.error);
+  console.log('isError: ', loginMutation.isError);
 
   const submitHandler = async (e) => {
     e.preventDefault(); // 이벤트 발생
@@ -47,12 +52,6 @@ const Login = () => {
     // }
   };
 
-  useEffect(() => {
-    if (localStorage.getItem('token')) {
-      navigate('/profile');
-    }
-  }, []);
-
   return (
     <Container
       className={'mt-5'}
@@ -63,6 +62,12 @@ const Login = () => {
         <Spinner animation="border" role="status">
           <span className="visually-hidden">Loading...</span>
         </Spinner>
+      )}
+      {loginMutation.error && (
+        <Alert variant="danger" onClose={() => setShow(false)} dismissible>
+          <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
+          <p>{loginMutation.error.response.data.message}</p>
+        </Alert>
       )}
       <Row className={'mt-4'}>
         <Form onSubmit={submitHandler}>

@@ -1,16 +1,19 @@
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { API_ENDPOINTS } from '../constants/api';
 import Cookies from 'js-cookie';
 import { useAuth } from '../context/authContext';
+import axiosInstanse from '../api/apiInstanse';
 
 export const useSignup = () => {
   const navigate = useNavigate();
 
   return useMutation({
     mutationFn: async (userData) => {
-      const { data } = await axios.post(API_ENDPOINTS.AUTH.SIGNUP, userData);
+      const { data } = await axiosInstanse.post(
+        API_ENDPOINTS.AUTH.SIGNUP,
+        userData,
+      );
 
       return data.data;
     },
@@ -28,7 +31,7 @@ export const useLogin = () => {
   const navigate = useNavigate();
   return useMutation({
     mutationFn: async ({ email, password }) => {
-      const { data } = await axios.post(API_ENDPOINTS.AUTH.LOGIN, {
+      const { data } = await axiosInstanse.post(API_ENDPOINTS.AUTH.LOGIN, {
         email,
         password,
       });
@@ -36,14 +39,14 @@ export const useLogin = () => {
       return data;
     },
     onSuccess: (data) => {
-      Cookies.set('acceessToken', data.accessToken, {
+      Cookies.set('accessToken', data.accessToken, {
         expires: 1,
         secure: true,
       });
 
       login(data.accessToken);
 
-      navigate('/product');
+      navigate('/profile');
     },
     onError: (error) => {
       console.error('Error Is Login: ', error.response.data.message);

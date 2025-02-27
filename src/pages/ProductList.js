@@ -1,26 +1,52 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
 import { Button, Card, Col, Container, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { useProductList } from '../hooks/useProduct';
 
 const ProductList = () => {
-  const [products, setProducts] = useState([]);
-  const getProducts = async () => {
-    try {
-      const result = await axios.get(
-        'https://localhost/api/v1/product/all?sort=createdAt&order=ASC&page=1&take=20',
-      );
+  const [page, setPage] = useState(1);
+  const [take, setTake] = useState(10);
 
-      setProducts(result.data.body.data);
-    } catch (err) {
-      console.log(err.message);
-    }
+  const {
+    data: products,
+    error,
+    isError,
+    isPending,
+  } = useProductList({ page, take });
+
+  console.log('@@@@@@@@@@', products);
+
+  const handleChange = (event) => {
+    const value = Number(event.target.value);
+    setTake(value);
+    console.log('선택한 숫자:', value);
   };
-  useEffect(() => {
-    getProducts();
-  }, []);
+
+  // const getProducts = async () => {
+  //   // try {
+  //   //   const result = await axios.get(
+  //   //     'https://localhost/api/v1/product/all?sort=createdAt&order=ASC&page=1&take=20',
+  //   //   );
+  //   //
+  //   //   setProducts(result.data.body.data);
+  //   // } catch (err) {
+  //   //   console.log(err.message);
+  //   // }
+  // };
+
   return (
     <Container className={'mt-3'}>
+      <div>
+        <label htmlFor="numberSelect">숫자 선택: </label>
+        <select id="numberSelect" value={take} onChange={handleChange}>
+          {Array.from({ length: 10 }, (_, i) => i + 1).map((num) => (
+            <option key={num} value={num}>
+              {num}
+            </option>
+          ))}
+        </select>
+        <p>현재 선택된 숫자: {take}</p>
+      </div>
       <Row>
         {products?.map((product) => (
           <Col className={'mt-3'}>

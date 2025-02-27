@@ -1,13 +1,12 @@
 import React from 'react';
 import { RouterProvider } from 'react-router-dom';
-import NavBar from './components/NavBar';
 import { AuthProvider } from './context/authContext';
 import router from './router';
 
 const App = () => {
   return (
     <AuthProvider>
-      <NavBar />
+      {/*<NavBar />*/}
       {/*<Outlet />*/}
       <RouterProvider router={router} />
     </AuthProvider>

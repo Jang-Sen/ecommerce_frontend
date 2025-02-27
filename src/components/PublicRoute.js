@@ -1,11 +1,12 @@
 import React from 'react';
-import Cookies from 'js-cookie';
 import { Navigate, Outlet } from 'react-router-dom';
+import { useAuth } from '../context/authContext';
 
 const PublicRoute = () => {
-  const accessToken = Cookies.get('accessToken');
+  // const accessToken = Cookies.get('accessToken');
+  const { user } = useAuth();
 
-  return accessToken ? <Navigate to={'/profile'} replace /> : <Outlet />;
+  return user ? <Navigate to={'/profile'} replace /> : <Outlet />;
 };
 
 export default PublicRoute;

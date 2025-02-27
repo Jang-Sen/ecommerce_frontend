@@ -8,10 +8,16 @@ export const API_ENDPOINTS = {
     EMAIL_CHECK: `${BASE_URL}/auth/email/check`,
     PASSWORD_FIND: `${BASE_URL}/auth/find/password`,
     PASSWORD_CHANGE: `${BASE_URL}/auth/change/password`,
+    USER_INFO: `${BASE_URL}/auth`,
+    REFRESH: `${BASE_URL}/auth/refresh`,
   },
   SOCIAL: {
     GOOGLE: `${BASE_URL}/auth/google`,
     NAVER: `${BASE_URL}/auth/naver`,
     KAKAO: `${BASE_URL}/auth/kakao`,
+  },
+  PRODUCT: {
+    LIST: `${BASE_URL}/product/all`,
+    DETAIL: `${BASE_URL}/product/:id`,
   },
 };
