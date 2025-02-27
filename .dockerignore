@@ -1,11 +1,26 @@
-# Items that don't need to be in a Docker image.
-# Anything not used by the build system should go here.
-Dockerfile
-.dockerignore
-.gitignore
-README.md
-
-# Artifacts that will be built during image creation.
-# This should contain all files created during `npm run build`.
-build
+# Node modules
 node_modules
+
+# Build directory
+build
+
+# Logs
+*.log
+
+# 환경 변수 파일
+.env
+.env.*
+
+# Docker 관련
+Dockerfile
+docker-compose.*
+
+# 기타
+coverage
+.cache
+.git
+
+# React specific
+.vscode
+.idea
+.history
