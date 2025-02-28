@@ -6,12 +6,12 @@ export const useProductList = ({ page, take } = { page: 1, take: 10 }) => {
   return useQuery({
     queryKey: ['products', page, take],
     queryFn: async () => {
-      console.log(`${API_ENDPOINTS.PRODUCT.LIST}?page=${page}&take=${take}`);
+      // console.log(`${API_ENDPOINTS.PRODUCT.LIST}?page=${page}&take=${take}`);
       const { data } = await axiosInstanse.get(
         `${API_ENDPOINTS.PRODUCT.LIST}?page=${page}&take=${take}`,
       );
 
-      console.log(data);
+      // console.log(data);
       return data.body;
     },
     retry: false,

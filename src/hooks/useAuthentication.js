@@ -4,6 +4,7 @@ import { API_ENDPOINTS } from '../constants/api';
 import Cookies from 'js-cookie';
 import { useAuth } from '../context/authContext';
 import axiosInstanse from '../api/apiInstanse';
+import { useUserInfo } from './useUserInfo';
 
 export const useSignup = () => {
   const navigate = useNavigate();
@@ -28,6 +29,7 @@ export const useSignup = () => {
 
 export const useLogin = () => {
   const { login } = useAuth();
+  const { refetch } = useUserInfo();
   const navigate = useNavigate();
   return useMutation({
     mutationFn: async ({ email, password }) => {
@@ -45,6 +47,8 @@ export const useLogin = () => {
       });
 
       login(data.accessToken);
+
+      refetch();
 
       navigate('/profile');
     },

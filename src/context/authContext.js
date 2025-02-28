@@ -61,7 +61,9 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     Cookies.remove('accessToken');
     Cookies.remove('refreshToken');
-    setUser(null);
+    Cookies.remove('Authentication');
+    Cookies.remove('Refresh');
+    setUser(null); // ✅ user 상태를 즉시 null로 변경
   };
 
   return (

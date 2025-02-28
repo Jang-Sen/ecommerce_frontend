@@ -7,6 +7,7 @@ import Profile from './pages/Profile';
 import ProductList from './pages/ProductList';
 import ProductDetail from './pages/ProductDetail';
 import Main from './pages/Main';
+import { MovieDetail, MovieList } from './pages';
 
 const router = createBrowserRouter(
   [
@@ -17,18 +18,47 @@ const router = createBrowserRouter(
         {
           element: <PublicRoute />,
           children: [
-            { path: '/signup', element: <SignUp /> },
-            { path: '/login', element: <Login /> },
-            { path: '/find/password', element: <PasswordFind /> },
-            { path: '/change/password', element: <PasswordChange /> },
+            {
+              path: '/signup',
+              element: <SignUp />,
+            },
+            {
+              path: '/login',
+              element: <Login />,
+            },
+            {
+              path: '/find/password',
+              element: <PasswordFind />,
+            },
+            {
+              path: '/change/password',
+              element: <PasswordChange />,
+            },
           ],
         },
         {
           element: <ProtectRoute />,
           children: [
-            { path: '/product', element: <ProductList /> }, // ✅ Product 페이지 추가
-            { path: '/profile', element: <Profile /> },
-            { path: '/product/:id', element: <ProductDetail /> },
+            {
+              path: '/product',
+              element: <ProductList />,
+            }, // ✅ Product 페이지 추가
+            {
+              path: '/profile',
+              element: <Profile />,
+            },
+            {
+              path: '/product/:id',
+              element: <ProductDetail />,
+            },
+            {
+              path: '/movie',
+              element: <MovieList />,
+            },
+            {
+              path: '/movie/:id',
+              element: <MovieDetail />,
+            },
           ],
         },
       ],

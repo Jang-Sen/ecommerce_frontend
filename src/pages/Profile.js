@@ -18,14 +18,11 @@ const Profile = () => {
 
   const pageCount = products?.meta?.pageCount || 1;
 
-  console.log('@@@@@@@@@@', products?.meta?.pageCount);
-
   // Handler
   const takeChangeHandler = (event) => {
     const value = Number(event.target.value);
     setTake(value);
     setPage(1);
-    console.log('선택한 숫자:', value);
   };
 
   const pageChangeHandler = (pageNumber) => {

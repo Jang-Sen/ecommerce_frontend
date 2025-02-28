@@ -23,6 +23,6 @@ export const useUserInfo = () => {
       return data.body;
     },
     retry: false,
-    staleTime: 1000 * 60 * 5,
+    staleTime: 1000 * 60 * 5, // 5분 동안 데이터 캐시 유지
   });
 };
