@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
+import { useProductList } from '../hooks/useProduct';
 import { Button, Card, Col, Container, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { useProductList } from '../hooks/useProduct';
 
 const ProductList = () => {
+  // Value
   const [page, setPage] = useState(1);
   const [take, setTake] = useState(10);
 
+  // Mutation
   const {
     data: products,
     error,
@@ -14,41 +16,47 @@ const ProductList = () => {
     isPending,
   } = useProductList({ page, take });
 
-  console.log('@@@@@@@@@@', products);
+  const pageCount = products?.meta?.pageCount || 1;
 
-  const handleChange = (event) => {
+  console.log('@@@@@@@@@@', products?.meta?.pageCount);
+
+  // Handler
+  const takeChangeHandler = (event) => {
     const value = Number(event.target.value);
     setTake(value);
+    setPage(1);
     console.log('선택한 숫자:', value);
   };
 
-  // const getProducts = async () => {
-  //   // try {
-  //   //   const result = await axios.get(
-  //   //     'https://localhost/api/v1/product/all?sort=createdAt&order=ASC&page=1&take=20',
-  //   //   );
-  //   //
-  //   //   setProducts(result.data.body.data);
-  //   // } catch (err) {
-  //   //   console.log(err.message);
-  //   // }
-  // };
+  const pageChangeHandler = (pageNumber) => {
+    setPage(pageNumber);
+  };
 
   return (
-    <Container className={'mt-3'}>
-      <div>
-        <label htmlFor="numberSelect">숫자 선택: </label>
-        <select id="numberSelect" value={take} onChange={handleChange}>
+    <Container className="mt-3">
+      {/* Take 설정 */}
+      <div className="d-flex justify-content-end mb-2">
+        <select
+          id="numberSelect"
+          value={take}
+          onChange={takeChangeHandler}
+          className="form-select w-auto"
+        >
           {Array.from({ length: 10 }, (_, i) => i + 1).map((num) => (
             <option key={num} value={num}>
               {num}
             </option>
           ))}
         </select>
-        <p>현재 선택된 숫자: {take}</p>
+        <label htmlFor="numberSelect" className="me-2 fw-bold mt-1">
+          &nbsp;개씩 보기
+        </label>
       </div>
+
+      {isPending && <p>Data Loading..</p>}
+
       <Row>
-        {products?.map((product) => (
+        {products?.data?.map((product, index) => (
           <Col className={'mt-3'}>
             <Card style={{ width: '18rem' }}>
               <Card.Img
@@ -80,8 +88,21 @@ const ProductList = () => {
           </Col>
         ))}
       </Row>
+
+      {/* 페이지네이션 */}
+      <div className="d-flex justify-content-center mt-4">
+        {Array.from({ length: pageCount }, (_, i) => i + 1).map((num) => (
+          <Button
+            key={num}
+            variant={num === page ? 'primary' : 'outline-primary'}
+            className="me-2"
+            onClick={() => pageChangeHandler(num)}
+          >
+            {num}
+          </Button>
+        ))}
+      </div>
     </Container>
   );
 };
-
 export default ProductList;

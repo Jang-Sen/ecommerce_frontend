@@ -4,10 +4,11 @@ import { Button, Card, Col, Container, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 const Profile = () => {
+  // Value
   const [page, setPage] = useState(1);
   const [take, setTake] = useState(10);
-  const [pageCount, setPageCount] = useState([]);
 
+  // Mutation
   const {
     data: products,
     error,
@@ -15,29 +16,43 @@ const Profile = () => {
     isPending,
   } = useProductList({ page, take });
 
+  const pageCount = products?.meta?.pageCount || 1;
+
   console.log('@@@@@@@@@@', products?.meta?.pageCount);
 
-  const handleChange = (event) => {
+  // Handler
+  const takeChangeHandler = (event) => {
     const value = Number(event.target.value);
     setTake(value);
+    setPage(1);
     console.log('선택한 숫자:', value);
   };
 
-  const handleCheck = () => {};
+  const pageChangeHandler = (pageNumber) => {
+    setPage(pageNumber);
+  };
 
   return (
-    <Container>
-      <div>
-        <label htmlFor="numberSelect">숫자 선택: </label>
-        <select id="numberSelect" value={take} onChange={handleChange}>
+    <Container className="mt-3">
+      {/* Take 설정 */}
+      <div className="d-flex justify-content-end mb-2">
+        <select
+          id="numberSelect"
+          value={take}
+          onChange={takeChangeHandler}
+          className="form-select w-auto"
+        >
           {Array.from({ length: 10 }, (_, i) => i + 1).map((num) => (
             <option key={num} value={num}>
               {num}
             </option>
           ))}
         </select>
-        <p>현재 선택된 숫자: {take}</p>
+        <label htmlFor="numberSelect" className="me-2 fw-bold mt-1">
+          &nbsp;개씩 보기
+        </label>
       </div>
+
       {isPending && <p>Data Loading..</p>}
 
       <Row>
@@ -73,6 +88,20 @@ const Profile = () => {
           </Col>
         ))}
       </Row>
+
+      {/* 페이지네이션 */}
+      <div className="d-flex justify-content-center mt-4">
+        {Array.from({ length: pageCount }, (_, i) => i + 1).map((num) => (
+          <Button
+            key={num}
+            variant={num === page ? 'primary' : 'outline-primary'}
+            className="me-2"
+            onClick={() => pageChangeHandler(num)}
+          >
+            {num}
+          </Button>
+        ))}
+      </div>
     </Container>
   );
 };

@@ -6,25 +6,27 @@ import ProtectRoute from './components/ProtectRoute';
 import Profile from './pages/Profile';
 import ProductList from './pages/ProductList';
 import ProductDetail from './pages/ProductDetail';
+import Main from './pages/Main';
 
 const router = createBrowserRouter(
   [
     {
       element: <Layout />, // ✅ HeadBar 포함된 공통 레이아웃
+      index: <Main />,
       children: [
         {
           element: <PublicRoute />,
           children: [
-            { path: '/', element: <SignUp /> },
+            { path: '/signup', element: <SignUp /> },
             { path: '/login', element: <Login /> },
-            { path: '/forgot-password', element: <PasswordFind /> },
-            { path: '/change-password', element: <PasswordChange /> },
+            { path: '/find/password', element: <PasswordFind /> },
+            { path: '/change/password', element: <PasswordChange /> },
           ],
         },
         {
           element: <ProtectRoute />,
           children: [
-            { path: '/product', element: <ProductList /> }, // ✅ Members 페이지 추가
+            { path: '/product', element: <ProductList /> }, // ✅ Product 페이지 추가
             { path: '/profile', element: <Profile /> },
             { path: '/product/:id', element: <ProductDetail /> },
           ],

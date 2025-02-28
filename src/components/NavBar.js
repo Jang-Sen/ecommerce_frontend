@@ -13,8 +13,8 @@ const NavBar = () => {
   const queryClient = useQueryClient();
 
   const logoutHandler = () => {
-    // logout();
-    // queryClient.removeQueries(['user']);
+    logout();
+    queryClient.removeQueries(['user']);
     // navigate('/login');
   };
 
@@ -23,7 +23,7 @@ const NavBar = () => {
   return (
     <Navbar bg="light" expand="lg" className="shadow-sm">
       <Container>
-        <Navbar.Brand href="/product" className="fw-bold">
+        <Navbar.Brand href="/" className="fw-bold">
           Jangwon Ecommerce
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
