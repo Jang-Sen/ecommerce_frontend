@@ -8,6 +8,7 @@ const AuthContext = createContext(undefined);
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isRefreshing, setIsRefreshing] = useState(false); // 🔥 무한 실행 방지
+  const [loading, setLoading] = useState(true); // 로딩 상태 추가
 
   const refreshAccessToken = async () => {
     if (isRefreshing) return; // 🔥 이미 refreshToken 요청 중이면 실행 안 함
@@ -51,7 +52,13 @@ export const AuthProvider = ({ children }) => {
     } else {
       setUser({ token: accessToken });
     }
+
+    setLoading(false); // 로딩 완료
   }, []); // 🔥 `isRefreshing`을 의존성 배열에서 제거하여 무한 실행 방지
+
+  if (loading) {
+    return <div>Loading...</div>; // 초기 로딩 상태 표시
+  }
 
   const login = (token) => {
     Cookies.set('accessToken', token, { expires: 1, secure: true });
