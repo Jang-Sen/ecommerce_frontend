@@ -8,8 +8,8 @@ const PublicRoute = () => {
   const location = useLocation(); // 🔥 현재 페이지 확인
 
   if (
-    (user && location.pathname === '/login') ||
-    location.pathname === '/signup'
+    user &&
+    (location.pathname === '/login' || location.pathname === '/signup')
   ) {
     return <Navigate to={'/'} replace />;
   }

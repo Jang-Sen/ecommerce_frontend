@@ -10,6 +10,14 @@ export const AuthProvider = ({ children }) => {
   const [isRefreshing, setIsRefreshing] = useState(false); // 🔥 무한 실행 방지
   const [loading, setLoading] = useState(true); // 로딩 상태 추가
 
+  const logout = () => {
+    Cookies.remove('accessToken');
+    Cookies.remove('refreshToken');
+    Cookies.remove('Authentication');
+    Cookies.remove('Refresh');
+    setUser(null); // ✅ user 상태를 즉시 null로 변경
+  };
+  
   const refreshAccessToken = async () => {
     if (isRefreshing) return; // 🔥 이미 refreshToken 요청 중이면 실행 안 함
 
@@ -63,14 +71,6 @@ export const AuthProvider = ({ children }) => {
   const login = (token) => {
     Cookies.set('accessToken', token, { expires: 1, secure: true });
     setUser({ token });
-  };
-
-  const logout = () => {
-    Cookies.remove('accessToken');
-    Cookies.remove('refreshToken');
-    Cookies.remove('Authentication');
-    Cookies.remove('Refresh');
-    setUser(null); // ✅ user 상태를 즉시 null로 변경
   };
 
   return (
