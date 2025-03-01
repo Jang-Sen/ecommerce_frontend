@@ -54,7 +54,7 @@ const Profile = () => {
 
       <Row>
         {products?.data?.map((product, index) => (
-          <Col className={'mt-3'}>
+          <Col key={product.id} className={'mt-3'}>
             <Card style={{ width: '18rem' }}>
               <Card.Img
                 variant="top"

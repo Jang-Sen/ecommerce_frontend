@@ -14,6 +14,7 @@ const router = createBrowserRouter(
     {
       element: <Layout />, // ✅ HeadBar 포함된 공통 레이아웃
       index: <Main />,
+      // errorElement: <Error />,
       children: [
         {
           element: <PublicRoute />,
@@ -119,7 +120,7 @@ const router = createBrowserRouter(
 // {
 //   path: '/',
 //   element: <App />,
-//   errorElement: <NotFound />,
+//   errorElement: <Error />,
 //   children: [
 //     {
 //       index: true,

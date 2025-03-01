@@ -18,9 +18,18 @@ const ProductList = () => {
 
   const pageCount = products?.meta?.pageCount || 1;
 
+  // 페이지네이션 그룹 (10개씩 표시)
+  const [currentGroup, setCurrentGroup] = useState(1);
+  const itemsPerPage = 10; // 한 번에 보여줄 페이지 버튼 개수
+
+  const totalGroups = Math.ceil(pageCount / itemsPerPage);
+  const startPage = (currentGroup - 1) * itemsPerPage + 1;
+  const endPage = Math.min(startPage + itemsPerPage - 1, pageCount);
+
   // console.log('@@@@@@@@@@', products?.meta?.pageCount);
 
   // Handler
+  // 데이터 보기 개수 변경 핸들러
   const takeChangeHandler = (event) => {
     const value = Number(event.target.value);
     setTake(value);
@@ -28,8 +37,22 @@ const ProductList = () => {
     // console.log('선택한 숫자:', value);
   };
 
+  // 페이지 변경 핸들러
   const pageChangeHandler = (pageNumber) => {
     setPage(pageNumber);
+  };
+
+  // 페이지 그룹 변경 핸들러
+  const prevGroupHandler = () => {
+    if (currentGroup > 1) {
+      setCurrentGroup(currentGroup - 1);
+    }
+  };
+
+  const nextGroupHandler = () => {
+    if (currentGroup < totalGroups) {
+      setCurrentGroup(currentGroup + 1);
+    }
   };
 
   return (
@@ -57,7 +80,7 @@ const ProductList = () => {
 
       <Row>
         {products?.data?.map((product, index) => (
-          <Col className={'mt-3'}>
+          <Col key={product.id} className={'mt-3'}>
             <Card style={{ width: '18rem' }}>
               <Card.Img
                 variant="top"
@@ -91,7 +114,21 @@ const ProductList = () => {
 
       {/* 페이지네이션 */}
       <div className="d-flex justify-content-center mt-4">
-        {Array.from({ length: pageCount }, (_, i) => i + 1).map((num) => (
+        {/* 이전 페이지 그룹 버튼 */}
+        <Button
+          variant="outline-primary"
+          className="me-2"
+          onClick={prevGroupHandler}
+          disabled={currentGroup === 1}
+        >
+          {'<'}
+        </Button>
+
+        {/* 페이지 버튼 (10개씩) */}
+        {Array.from(
+          { length: endPage - startPage + 1 },
+          (_, i) => startPage + i,
+        ).map((num) => (
           <Button
             key={num}
             variant={num === page ? 'primary' : 'outline-primary'}
@@ -101,6 +138,16 @@ const ProductList = () => {
             {num}
           </Button>
         ))}
+
+        {/* 다음 페이지 그룹 버튼 */}
+        <Button
+          variant="outline-primary"
+          className="me-2"
+          onClick={nextGroupHandler}
+          disabled={currentGroup === totalGroups}
+        >
+          {'>'}
+        </Button>
       </div>
     </Container>
   );

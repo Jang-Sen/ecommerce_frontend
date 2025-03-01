@@ -1,4 +1,5 @@
 export const BASE_URL = 'http://localhost/api/v1';
+export const MOVIE_URL = 'https://api.themoviedb.org/3/movie';
 
 export const API_ENDPOINTS = {
   AUTH: {
@@ -19,5 +20,9 @@ export const API_ENDPOINTS = {
   PRODUCT: {
     LIST: `${BASE_URL}/product/all`,
     DETAIL: `${BASE_URL}/product/:id`,
+  },
+  MOVIE: {
+    LIST: `${MOVIE_URL}/now_playing`,
+    DETAIL: `${MOVIE_URL}/:id`,
   },
 };
