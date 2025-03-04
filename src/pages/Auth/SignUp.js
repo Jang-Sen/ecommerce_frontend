@@ -11,7 +11,11 @@ import {
 import { agreementItems, socialMenus } from '../../common';
 import { useSignup } from '../../hooks/useAuthentication';
 import { useEmailCheck, useEmailSend } from '../../hooks/useVerification';
-import { useGoogleLogin } from '../../hooks/useSocialLogin';
+import {
+  useGoogleLogin,
+  useKakaoLogin,
+  useNaverLogin,
+} from '../../hooks/useSocialLogin';
 
 const SignUp = () => {
   const [name, setName] = useState('');
@@ -27,10 +31,18 @@ const SignUp = () => {
   const emailSendMutation = useEmailSend();
   const emailCheckMutation = useEmailCheck();
   const googleLoginMutation = useGoogleLogin();
+  const kakaoLoginMutation = useKakaoLogin();
+  const naverLoginMutation = useNaverLogin();
 
   // 소셜 로그인 핸들러
   const socialLoginHandler = async (platform) => {
-    googleLoginMutation.mutate();
+    if (platform === 'google') {
+      googleLoginMutation.mutate();
+    } else if (platform === 'kakao') {
+      kakaoLoginMutation.mutate();
+    } else if (platform === 'naver') {
+      naverLoginMutation.mutate();
+    }
 
     // const socialUrl = {
     //   google: 'http://211.49.53.89/api/v1/auth/google',
