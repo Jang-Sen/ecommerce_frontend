@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { useProductDetail } from '../hooks/useProduct';
+import { useProductDetail } from '../../hooks/useProduct';
 import { Col, Container, Image, Row } from 'react-bootstrap';
 
 const ProductDetail = () => {

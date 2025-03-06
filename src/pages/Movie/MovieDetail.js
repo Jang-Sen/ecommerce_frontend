@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Col, Container, Image, Row } from 'react-bootstrap';
-import { useMovieDetail } from '../hooks/useMovie';
+import { useMovieDetail } from '../../hooks/useMovie';
 
 const MovieDetail = () => {
   // param

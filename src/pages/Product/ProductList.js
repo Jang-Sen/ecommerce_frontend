@@ -1,12 +1,23 @@
 import React, { useState } from 'react';
-import { useProductList } from '../hooks/useProduct';
-import { Button, Card, Col, Container, Row } from 'react-bootstrap';
+import { useProductList } from '../../hooks/useProduct';
+import {
+  Button,
+  Card,
+  Col,
+  Container,
+  Form,
+  InputGroup,
+  Row,
+} from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 const ProductList = () => {
   // Value
   const [page, setPage] = useState(1);
   const [take, setTake] = useState(10);
+  const [sortOrder, setSortOrder] = useState('createdAt_DESC');
+  const [keyword, setKeyword] = useState('');
+  const [search, setSearch] = useState('');
 
   // Mutation
   const {
@@ -14,7 +25,13 @@ const ProductList = () => {
     error,
     isError,
     isPending,
-  } = useProductList({ page, take });
+  } = useProductList({
+    keyword,
+    sort: sortOrder.split('_')[0],
+    order: sortOrder.split('_')[1],
+    page,
+    take,
+  });
 
   const pageCount = products?.meta?.pageCount || 1;
 
@@ -28,7 +45,29 @@ const ProductList = () => {
 
   // console.log('@@@@@@@@@@', products?.meta?.pageCount);
 
-  // Handler
+  // 검색 핸들러
+  const searchHandler = (event) => {
+    setSearch(event.target.value);
+  };
+
+  // 검색 버튼 클릭 핸들러
+  const searchButtonHandler = () => {
+    setKeyword(search);
+    setPage(1);
+  };
+
+  // 엔터 키 핸들러
+  const enterHandler = (event) => {
+    event.preventDefault();
+    searchButtonHandler();
+  };
+
+  // 정렬 및 순서 변경 핸들러
+  const sortOrderChangeHandler = (event) => {
+    setSortOrder(event.target.value);
+    setPage(1);
+  };
+
   // 데이터 보기 개수 변경 핸들러
   const takeChangeHandler = (event) => {
     const value = Number(event.target.value);
@@ -57,6 +96,37 @@ const ProductList = () => {
 
   return (
     <Container className="mt-3">
+      {/* 검색 및 정렬 옵션 */}
+      <Form
+        onSubmit={enterHandler}
+        className="d-flex justify-content-between mb-2"
+      >
+        <InputGroup className="w-50 me-2">
+          <Form.Control
+            type="text"
+            placeholder="Search products..."
+            value={search}
+            onChange={searchHandler}
+            className="w-50 me-2"
+          />
+          <Button variant="outline-primary" type="submit">
+            Search
+          </Button>
+        </InputGroup>
+
+        <div className="d-flex">
+          <Form.Select
+            value={sortOrder}
+            onChange={sortOrderChangeHandler}
+            className="me-2"
+          >
+            <option value="createdAt_DESC">최신순</option>
+            <option value="price_DESC">높은 가격순</option>
+            <option value="price_ASC">낮은 가격순</option>
+          </Form.Select>
+        </div>
+      </Form>
+
       {/* Take 설정 */}
       <div className="d-flex justify-content-end mb-2">
         <select

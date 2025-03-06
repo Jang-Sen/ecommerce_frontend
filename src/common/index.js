@@ -7,7 +7,7 @@ const socialMenus = [
   {
     id: 2,
     name: 'naver',
-    image: '/images/btnG_축약형.png',
+    image: '/images/btnG_naver.png',
   },
   {
     id: 3,

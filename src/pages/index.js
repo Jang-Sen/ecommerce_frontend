@@ -1,4 +1,4 @@
-import MovieDetail from './MovieDetail';
-import MovieList from './MovieList';
+import MovieDetail from './Movie/MovieDetail';
+import MovieList from './Movie/MovieList';
 
 export { MovieList, MovieDetail };

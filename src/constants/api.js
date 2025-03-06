@@ -1,5 +1,6 @@
 export const BASE_URL = 'http://localhost/api/v1';
 export const MOVIE_URL = 'https://api.themoviedb.org/3/movie';
+export const DOMAIN_URL = 'https://jangsen.duckdns.org/api/v1';
 
 export const API_ENDPOINTS = {
   AUTH: {

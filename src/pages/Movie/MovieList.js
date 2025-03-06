@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Card, Col, Container, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { useMovieList } from '../hooks/useMovie';
+import { useMovieList } from '../../hooks/useMovie';
 
 const MovieList = () => {
   // const [movies, setMovies] = useState([]);

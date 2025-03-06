@@ -4,8 +4,8 @@ import PublicRoute from './components/PublicRoute';
 import { Login, PasswordChange, PasswordFind, SignUp } from './pages/Auth';
 import ProtectRoute from './components/ProtectRoute';
 import Profile from './pages/Profile';
-import ProductList from './pages/ProductList';
-import ProductDetail from './pages/ProductDetail';
+import ProductList from './pages/Product/ProductList';
+import ProductDetail from './pages/Product/ProductDetail';
 import Main from './pages/Main';
 import { MovieDetail, MovieList } from './pages';
 
@@ -13,12 +13,15 @@ const router = createBrowserRouter(
   [
     {
       element: <Layout />, // ✅ HeadBar 포함된 공통 레이아웃
-      index: <Main />,
       // errorElement: <Error />,
       children: [
         {
           element: <PublicRoute />,
           children: [
+            {
+              path: '/',
+              element: <Main />,
+            },
             {
               path: '/signup',
               element: <SignUp />,
@@ -41,13 +44,13 @@ const router = createBrowserRouter(
           element: <ProtectRoute />,
           children: [
             {
-              path: '/product',
-              element: <ProductList />,
-            }, // ✅ Product 페이지 추가
-            {
               path: '/profile',
               element: <Profile />,
             },
+            {
+              path: '/product',
+              element: <ProductList />,
+            }, // ✅ Product 페이지 추가
             {
               path: '/product/:id',
               element: <ProductDetail />,
