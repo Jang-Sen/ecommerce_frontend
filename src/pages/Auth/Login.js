@@ -5,11 +5,18 @@ import {
   Container,
   FloatingLabel,
   Form,
+  Image,
   Row,
   Spinner,
 } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { useLogin } from '../../hooks/useAuthentication';
+import { socialMenus } from '../../common';
+import {
+  useGoogleLogin,
+  useKakaoLogin,
+  useNaverLogin,
+} from '../../hooks/useSocialLogin';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -19,9 +26,23 @@ const Login = () => {
   const [show, setShow] = useState(true);
 
   const loginMutation = useLogin();
+  const googleLoginMutation = useGoogleLogin();
+  const kakaoLoginMutation = useKakaoLogin();
+  const naverLoginMutation = useNaverLogin();
 
   console.log('Error: ', loginMutation.error);
   console.log('isError: ', loginMutation.isError);
+
+  // 소셜 로그인 핸들러
+  const socialLoginHandler = async (platform) => {
+    if (platform === 'google') {
+      googleLoginMutation.mutate();
+    } else if (platform === 'kakao') {
+      kakaoLoginMutation.mutate();
+    } else if (platform === 'naver') {
+      naverLoginMutation.mutate();
+    }
+  };
 
   const submitHandler = async (e) => {
     e.preventDefault(); // 이벤트 발생
@@ -112,6 +133,45 @@ const Login = () => {
             회원가입
           </Link>
         </Form>
+
+        <text
+          className="mt-5"
+          style={{
+            fontSize: 'smaller',
+            color: 'GrayText',
+            textAlign: 'center',
+          }}
+        >
+          SNS 계정으로 간편하게 로그인 / 회원가입
+        </text>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            gap: '10px',
+            margin: '15px 0',
+          }}
+        >
+          {socialMenus.map((menu, index) => (
+            <Button
+              key={menu.id}
+              onClick={() => socialLoginHandler(menu.name)}
+              style={{
+                border: 'none',
+                background: 'transparent',
+                marginBottom: '10px',
+                cursor: 'pointer',
+                borderRadius: '5px',
+              }}
+            >
+              <Image
+                src={menu.image}
+                alt={menu.name}
+                style={{ width: '150px', height: '50px' }}
+              />
+            </Button>
+          ))}
+        </div>
       </Row>
     </Container>
   );
