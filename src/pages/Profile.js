@@ -1,17 +1,54 @@
-import React from 'react';
-import { Card, Col, Container, ListGroup, Row } from 'react-bootstrap';
-import { useUserInfo } from '../hooks/useUserInfo';
+import React, { useEffect, useState } from 'react';
+import {
+  Button,
+  Card,
+  Col,
+  Container,
+  Form,
+  ListGroup,
+  Row,
+} from 'react-bootstrap';
+import { useUpdateProfile, useUserInfo } from '../hooks/useUserInfo';
 
 const Profile = () => {
   const { data: user, isPending } = useUserInfo();
+  const { mutate: updateUserInfo } = useUpdateProfile();
+
+  console.log('@@@@@@@@@@@@@@@@@@@@@@', user);
+
+  // 편집 모드
+  const [isEditing, setIsEditing] = useState(false);
 
   // 프로필 기본값 설정
-  const userProfile = user?.profile || {
-    birth: '미입력',
-    gender: '선택 안함',
-    introduce: '소개글이 없습니다.',
-    snsLink: '',
+  const [userData, setUserData] = useState({
+    birth: user?.profile?.birth ? user.profile.birth.split('T')[0] : '',
+    gender: user?.profile?.gender || 'default',
+    introduce: user?.profile?.introduce || '소개글이 없습니다.',
+    snsLink: user?.profile?.snsLink || '',
+  });
+
+  // 입력 변경 핸들러
+  const changeHandler = (event) => {
+    const { name, value } = event.target;
+    setUserData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
+
+  // 수정 완료 핸들러
+  const saveHandler = () => {
+    const updateData = new FormData();
+    Object.keys(userData).forEach((key) => {
+      updateData.append(`profile.${key}`, userData[key]);
+    });
+
+    updateUserInfo(updateData, {
+      onSuccess: () => setIsEditing(false),
+    });
+  };
+
+  useEffect(() => {}, [user]);
 
   // console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@', user);
 
@@ -57,32 +94,138 @@ const Profile = () => {
           <Card className="mt-3">
             <Card.Body className="text-center">
               <h5 className="mb-3">프로필 정보</h5>
-              <p>
-                <strong>🎂 생년월일:</strong> {userProfile.birth}
-              </p>
-              <p>
-                <strong>🚻 성별:</strong>{' '}
-                {userProfile.gender === 'male'
-                  ? '남성'
-                  : userProfile.gender === 'female'
-                    ? '여성'
-                    : '선택 안함'}
-              </p>
-              <p>
-                <strong>💬 한줄 소개:</strong> {userProfile.introduce}
-              </p>
-              {userProfile.snsLink && (
-                <p>
-                  <strong>🔗 SNS:</strong>{' '}
-                  <a
-                    href={userProfile.snsLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
+
+              {isEditing ? (
+                // 수정 모드
+                <Form>
+                  <Form.Group className="mb-2">
+                    <Form.Label>
+                      <strong>🎂 생년월일</strong>
+                    </Form.Label>
+                    <Form.Control
+                      type="date"
+                      name="birth"
+                      value={userData.birth}
+                      onChange={changeHandler}
+                    />
+                  </Form.Group>
+
+                  <Form.Group className="mb-2">
+                    <Form.Label>
+                      <strong>🚻 성별</strong>
+                    </Form.Label>
+                    <Form.Select
+                      name="gender"
+                      value={userData.gender}
+                      onChange={changeHandler}
+                    >
+                      <option value="default">선택 안함</option>
+                      <option value="male">남성</option>
+                      <option value="female">여성</option>
+                    </Form.Select>
+                  </Form.Group>
+
+                  <Form.Group className="mb-2">
+                    <Form.Label>
+                      <strong>💬 한줄 소개</strong>
+                    </Form.Label>
+                    <Form.Control
+                      as="textarea"
+                      name="introduce"
+                      value={userData.introduce}
+                      onChange={changeHandler}
+                    />
+                  </Form.Group>
+
+                  <Form.Group className="mb-2">
+                    <Form.Label>
+                      <strong>🔗 SNS 링크</strong>
+                    </Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="snsLink"
+                      value={userData.snsLink}
+                      placeholder="https://www.example.com"
+                      onChange={changeHandler}
+                    />
+                  </Form.Group>
+
+                  <Button
+                    variant="primary"
+                    className="w-100 mt-3"
+                    onClick={saveHandler}
                   >
-                    {userProfile.snsLink}
-                  </a>
-                </p>
+                    저장
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    className="w-100 mt-2"
+                    onClick={() => setIsEditing(false)}
+                  >
+                    취소
+                  </Button>
+                </Form>
+              ) : (
+                // 보기 모드
+                <>
+                  <p>
+                    <strong>🎂 생년월일:</strong> {userData.birth}
+                  </p>
+                  <p>
+                    <strong>🚻 성별:</strong>{' '}
+                    {userData.gender === 'male'
+                      ? '남성'
+                      : userData.gender === 'female'
+                        ? '여성'
+                        : '선택 안함'}
+                  </p>
+                  <p>
+                    <strong>💬 한줄 소개:</strong> {userData.introduce}
+                  </p>
+                  {userData.snsLink && (
+                    <p>
+                      <strong>🔗 SNS:</strong>{' '}
+                      <a
+                        href={userData.snsLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {userData.snsLink}
+                      </a>
+                    </p>
+                  )}
+                  <Button
+                    variant="outline-primary"
+                    className="w-100 mt-3"
+                    onClick={() => setIsEditing(true)}
+                  >
+                    수정하기
+                  </Button>
+                </>
               )}
+              {/*<p>*/}
+              {/*  <strong>🚻 성별:</strong>{' '}*/}
+              {/*  {userData.gender === 'male'*/}
+              {/*    ? '남성'*/}
+              {/*    : userData.gender === 'female'*/}
+              {/*      ? '여성'*/}
+              {/*      : '선택 안함'}*/}
+              {/*</p>*/}
+              {/*<p>*/}
+              {/*  <strong>💬 한줄 소개:</strong> {userData.introduce}*/}
+              {/*</p>*/}
+              {/*{userData.snsLink && (*/}
+              {/*  <p>*/}
+              {/*    <strong>🔗 SNS:</strong>{' '}*/}
+              {/*    <a*/}
+              {/*      href={userData.snsLink}*/}
+              {/*      target="_blank"*/}
+              {/*      rel="noopener noreferrer"*/}
+              {/*    >*/}
+              {/*      {userData.snsLink}*/}
+              {/*    </a>*/}
+              {/*  </p>*/}
+              {/*)}*/}
             </Card.Body>
           </Card>
 

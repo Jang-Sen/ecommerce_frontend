@@ -26,4 +26,7 @@ export const API_ENDPOINTS = {
     LIST: `${MOVIE_URL}/now_playing`,
     DETAIL: `${MOVIE_URL}/:id`,
   },
+  USER: {
+    UPDATE_PROFILE: `${BASE_URL}/user`,
+  },
 };
